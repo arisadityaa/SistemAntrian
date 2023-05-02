@@ -1,2 +1,2 @@
 # SistemAntrian
- Prototipe Sistem antrian bank menggunakan arduino nano
+ Prototipe Sistem antrian bank menggunakan arduino Uno
