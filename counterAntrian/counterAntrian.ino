@@ -28,18 +28,15 @@ void loop()
 {
   if(millis()>millisSerial+1000){
     String data = "";
-    bool stop = false; 
-    while(Serial.available()>0){
-      char c = Serial.read();
-      if(c != '#' && stop == false){
-        data+= char(c);
-      }else{
-        stop = true;
-      }
-    }
+    char serialData[10];
+    int dataLength = Serial.readBytesUntil('#', serialData, 10);
+    serialData[dataLength] = '\0';
+    data = String(serialData);
     data.trim();
     Serial.println("data = " + data);
-    
+    while (Serial.available() > 0) {
+      Serial.read();
+    }
     String dataIndex[2];
     int index = 0;
     for(int i = 0 ; i<= data.length(); i++){
@@ -49,15 +46,10 @@ void loop()
         dataIndex[index] += char(data[i]); 
       }
     }
-    if(dataIndex[0]!=""){
-      serviceCount = dataIndex[0].toInt();
-    }
-    
-    if(dataIndex[1]!=""){
-      tellerCount = dataIndex[1].toInt();
-    }
+    serviceCount = (dataIndex[0]!="") ? dataIndex[0].toInt() : serviceCount;
+    tellerCount = (dataIndex[1]!="") ? dataIndex[1].toInt() :tellerCount;
+
     Serial.println("Service = " + String(serviceCount) + ", Teller = " + String(tellerCount));
-    
     millisSerial=millis();
   }
   if(millis()>millisPrint+200){
